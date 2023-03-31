@@ -1,5 +1,6 @@
-package com.example.kotlinspringcrudwebapi.repository
+package com.example.kotlinspringcrudwebapi.repository.impl
 
+import com.example.kotlinspringcrudwebapi.repository.CustomerRepository
 import com.example.kotlinspringcrudwebapi.request.Customer
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
