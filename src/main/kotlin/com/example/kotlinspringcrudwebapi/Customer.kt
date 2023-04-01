@@ -1,4 +1,4 @@
-package com.example.kotlinspringcrudwebapi.request
+package com.example.kotlinspringcrudwebapi
 
 /**
  * Web API で利用するデータモデル
@@ -10,7 +10,7 @@ package com.example.kotlinspringcrudwebapi.request
  * @property lastName 名字
  */
 data class Customer(
-    val id: Long,
-    val firstName: String,
-    val lastName: String,
+        val id: Long,
+        val firstName: String,
+        val lastName: String,
 )

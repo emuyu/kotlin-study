@@ -1,14 +1,53 @@
-package com.example.kotlinspringcrudwebapi.repository.impl
+package com.example.kotlinspringcrudwebapi
 
-import com.example.kotlinspringcrudwebapi.repository.CustomerRepository
-import com.example.kotlinspringcrudwebapi.request.Customer
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 
-//TODO("ORMを利用してSQL書かないようにしたい")
+/**
+ * Customer テーブルを操作するメソッドをまとめたインタフェース
+ *
+ */
+interface CustomerRepository {
+    /**
+     * Customer テーブルにデータを挿入するメソッド
+     *
+     * @param firstName
+     * @param lastName
+     */
+    fun add(firstName: String, lastName: String)
+
+    /**
+     * Customer テーブルから全てのデータを取得するメソッド
+     *
+     * @return
+     */
+    fun find(): List<Customer>
+
+    /**
+     * Customer テーブルのカラムを更新するメソッド
+     *
+     * @param id
+     * @param firstName
+     * @param lastName
+     */
+    fun update(id: Int, firstName: String, lastName: String)
+
+    /**
+     * Customer テーブルのカラムを単一削除するメソッド
+     *
+     * @param id
+     */
+    fun delete(id: Int)
+}
+
+/**
+ * CustomerRepository を実装したクラス
+ *
+ * @property namedParameterJdbcTemplate
+ */
 @Repository
-class CustomerRepositoryImpl(val nameParameterJdbcTemplate: NamedParameterJdbcTemplate) : CustomerRepository {
+class CustomerRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : CustomerRepository {
     override fun add(firstName: String, lastName: String) {
         val sql = """
             INSERT INTO
@@ -22,12 +61,10 @@ class CustomerRepositoryImpl(val nameParameterJdbcTemplate: NamedParameterJdbcTe
             )
             ;
         """.trimIndent()
-
         val sqlParams = MapSqlParameterSource()
-            .addValue("first_name", firstName)
-            .addValue("last_name", lastName)
-
-        nameParameterJdbcTemplate.update(sql, sqlParams)
+                .addValue("first_name", firstName)
+                .addValue("last_name", lastName)
+        namedParameterJdbcTemplate.update(sql, sqlParams)
         return
     }
 
@@ -41,10 +78,8 @@ class CustomerRepositoryImpl(val nameParameterJdbcTemplate: NamedParameterJdbcTe
                 customer
             ;
         """.trimIndent()
-
         val sqlParams = MapSqlParameterSource()
-        val customerMap = nameParameterJdbcTemplate.queryForList(sql, sqlParams)
-
+        val customerMap = namedParameterJdbcTemplate.queryForList(sql, sqlParams)
         return customerMap.map {
             Customer(
                     it["id"].toString().toInt().toLong(),
@@ -64,13 +99,11 @@ class CustomerRepositoryImpl(val nameParameterJdbcTemplate: NamedParameterJdbcTe
             WHERE
                 id = :id
         """.trimIndent()
-
         val sqlParams = MapSqlParameterSource()
                 .addValue("first_name", firstName)
                 .addValue("last_name", lastName)
                 .addValue("id", id)
-
-        nameParameterJdbcTemplate.update(sql, sqlParams)
+        namedParameterJdbcTemplate.update(sql, sqlParams)
         return
     }
 
@@ -82,12 +115,9 @@ class CustomerRepositoryImpl(val nameParameterJdbcTemplate: NamedParameterJdbcTe
                 id = :id
             ;
         """.trimIndent()
-
         val sqlParams = MapSqlParameterSource()
                 .addValue("id", id)
-
-        nameParameterJdbcTemplate.update(sql, sqlParams)
+        namedParameterJdbcTemplate.update(sql, sqlParams)
         return
     }
-
 }
